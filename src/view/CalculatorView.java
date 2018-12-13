@@ -10,10 +10,15 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.EmptyBorder;
 
 import controller.CalculatorClient;
@@ -45,9 +50,12 @@ public class CalculatorView extends JFrame{
 	private JButton button_subtract;
 	private JButton button_plus;
 	private JButton button_Submit;
-	
+	private JButton button_clear;
+
 	private JPanel panel_2;
-	private JTextField messagesFromServer;
+	private JTextArea messagesFromServer;
+	private JScrollBar scrollBar;
+	private JScrollPane scrollPane;
 	
 	/**
 	 * Create the frame.
@@ -167,19 +175,58 @@ public class CalculatorView extends JFrame{
 		button_Submit.setBounds(74, 195, 116, 49);
 		panel_1.add(button_Submit);
 		textField.setBounds(12, 13, 285, 95);
+		
+		button_clear = new JButton("C");
+		button_clear.setPreferredSize(new Dimension(50, 50));
+		button_clear.setBounds(255, 133, 54, 49);
+		panel_1.add(button_clear);
+		textField.setBounds(12, 13, 285, 95);
 
+
+//		panel_2 = new JPanel();
+////		panel_2.setLayout(null);
+//		panel_2.setBackground(new Color(230, 230, 250));
+//		panel_2.setBounds(0, 392, 309, 139);
+//		contentPane.add(panel_2);
+//
+//		messagesFromServer = new JTextArea();
+//		//messagesFromServer.setBounds(12, 13, 262, 113);
+//		
+//		scrollPane = new JScrollPane(messagesFromServer);
+//		scrollPane.setBounds(12, 13, 262, 113);
+//		panel_2.add(scrollPane);
 
 		panel_2 = new JPanel();
-		panel_2.setLayout(null);
+//		panel_2.setLayout(null);
 		panel_2.setBackground(new Color(230, 230, 250));
 		panel_2.setBounds(0, 392, 309, 139);
 		contentPane.add(panel_2);
-
-		messagesFromServer = new JTextField();
-		messagesFromServer.setColumns(10);
-		messagesFromServer.setBounds(12, 13, 285, 113);
-		panel_2.add(messagesFromServer);
+		//messagesFromServer.setBounds(12, 13, 262, 113);
 		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 13, 262, 113);
+		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
+		gl_panel_2.setHorizontalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+					.addContainerGap(21, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 276, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_panel_2.setVerticalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		
+		messagesFromServer = new JTextArea();
+		scrollPane.setViewportView(messagesFromServer);
+		//panel_2.setLayout(gl_panel_2);
+
+
+		//panel_2.add(messagesFromServer);
 		
 	}
 	
@@ -202,15 +249,16 @@ public class CalculatorView extends JFrame{
 		button_subtract.addActionListener(client.getListener());
 		button_plus.addActionListener(client.getListener());
 		button_Submit.addActionListener(client.getListener());
+		button_clear.addActionListener(client.getListener());
 	}
 	
 	
-	public JTextField getMessagesFromServer() {
+	public JTextArea getMessagesFromServer() {
 		return messagesFromServer;
 	}
 
 
-	public void setMessagesFromServer(JTextField messagesFromServer) {
+	public void setMessagesFromServer(JTextArea messagesFromServer) {
 		this.messagesFromServer = messagesFromServer;
 	}
 

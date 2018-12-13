@@ -93,6 +93,7 @@ public class CalculatorClient {
 			
 			//System.out.println("Message from the RMI-server was: \""
 			//+ message + "\"");
+			model.getObj().calculatorConnected();
 
 		}
 		catch (Exception e) {
@@ -106,14 +107,20 @@ public class CalculatorClient {
 	
 	private class Listener implements ActionListener {
 	    @Override
-	    public void actionPerformed(ActionEvent e) {	    	
-	    	if(!e.getActionCommand().equals("Submit")) {
+	    public void actionPerformed(ActionEvent e) {
+	    	if(e.getActionCommand().equals("C")) {
+	    		view.getTextField().setText("");
+	    	}
+	    	else if(!e.getActionCommand().equals("Submit")) {
 	    		view.getTextField().setText(view.getTextField().getText() +  e.getActionCommand());
 	    	}
 	    	else {
 	    		expression = view.getTextField().getText();
 	    		answer = evaluate(expression);
+	    		view.getTextField().setText(Integer.toString(answer));
+	    		view.getMessagesFromServer().setText(view.getMessagesFromServer().getText() + "\n" + "Message from server: " + answer);
 	    		System.out.println(answer);
+	    		expression = "";
 	    	}
 	      
 	    }

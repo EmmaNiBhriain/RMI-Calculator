@@ -2,6 +2,8 @@ package model;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import controller.CalculatorClient;
+
 /*Interface Calculator*/
 /**
  * 
@@ -13,4 +15,5 @@ public interface Calculator extends Remote{
 	int subract(int num1, int num2) throws RemoteException;
 	int multiply(int num1, int num2) throws RemoteException;
 	int divide(int num1, int num2) throws RemoteException;
+	void calculatorConnected() throws RemoteException; 
 }
