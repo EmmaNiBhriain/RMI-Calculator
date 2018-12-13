@@ -1,10 +1,13 @@
+package controller;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 
-/*class CalulcatorServer*/
+import model.Calculator;
+
+/*class CalculatorServer*/
 /**
  * 
  * @author Emma Ni Bhriain
@@ -29,11 +32,10 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 			CalculatorServer obj = new CalculatorServer();
 			
 			// Bind this object instance to the name "HelloServer".
-			// Include the following line if rmiregistry was not started on the command line
 			Registry registry = LocateRegistry.createRegistry( 1099 );
 
 			// and replace the Naming.rebind() with the next line
-			registry.rebind( "Calculator", obj );
+			registry.rebind("Calculator", obj );
 		
 			System.out.println("Calculator bound in registry");
 		}
