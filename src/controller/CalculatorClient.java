@@ -18,16 +18,16 @@ import view.CalculatorView;
  * This class is responsible for adding listeners to the CalculcatorView and also connecting to the remote server.
  * 
  * Fields:
- * 	int answer
- * 	int num1
- * 	int num2
+ * 	double answer
+ * 	double num1
+ * 	double num2
  *  Listener listener
  *  ClientModel model
  *  CalculatorView view
  *  
  * Public Methods:
  * 	Constructor: public CalculatorClient(CalculatorView view) 
- *  public int evaluate(String expression)
+ *  public double evaluate(String expression)
  *  public void connect()
  *  public static void main(String args[])
  *  public Listener getListener()
@@ -53,13 +53,13 @@ public class CalculatorClient {
 	/**
 	 * Variable to store the value of the evaluated calculation. Default value is 0 
 	 */
-	private int answer = 0;
+	private double answer = 0;
 	
 	/**
 	 * num1 and num2 are used to store the operands on which an operation will be performed
 	 */
-	private int num1;
-	private int num2;
+	private double num1;
+	private double num2;
 	
 	/**
 	 * The Listener variable is used to store an instance of the private Listener class.
@@ -135,11 +135,11 @@ public class CalculatorClient {
 	 * The calculations are done by calling methods in the remote server
 	 * 
 	 * @param String postfix expression
-	 * @return An integer representing the value of the evaluated expression.
+	 * @return A double representing the value of the evaluated expression.
 	 */
-	public int evaluate(String expression) {
+	public double evaluate(String expression) {
 		
-		Stack<Integer> operands = new Stack<>() ; //Create a stack to store the operands
+		Stack<Double> operands = new Stack<>() ; //Create a stack to store the operands
 		String[] sections = expression.trim().split("\\s"); //split the postfix expression by where whitespace occurs
 		for(int i=0; i<sections.length; i++) { 		//scan all characters of the postfix expression
 			String current = sections[i];
@@ -147,7 +147,7 @@ public class CalculatorClient {
 				continue;
 			
 			else if(isNumeric(current)) {//if the character is a number, push it to the stack
-				operands.push(Integer.parseInt(sections[i])); //convert the String to Integer and push to stack
+				operands.push(Double.parseDouble(sections[i])); //convert the String to Double and push to stack
 			}
 			
 			// If an operator is detected, remove the top two operands from the stack.
@@ -166,7 +166,7 @@ public class CalculatorClient {
 				switch(current) {
 				case "+":
 					try {
-						answer = model.getObj().add(num1, num2); //call the add(int, int) method in the server
+						answer = model.getObj().add(num1, num2); //call the add(double, double) method in the server
 						System.out.println("Sum of numbers = " + answer);
 
 					} catch (RemoteException e1) {
@@ -175,7 +175,7 @@ public class CalculatorClient {
 					break;		
 				case "x":
 					try {
-						answer = model.getObj().multiply(num1, num2); //call the multiply(int, int) method in the server
+						answer = model.getObj().multiply(num1, num2); //call the multiply(double, double) method in the server
 						System.out.println("product of numbers = " + answer);
 
 					} catch (RemoteException e1) {
@@ -184,7 +184,7 @@ public class CalculatorClient {
 					break;
 				case "-":
 					try {
-						answer = model.getObj().subtract(num2, num1); //call the subtract(int, int) method in the server
+						answer = model.getObj().subtract(num2, num1); //call the subtract(double, double) method in the server
 						System.out.println("Difference of numbers = " + answer);
 
 					} catch (RemoteException e1) {
@@ -193,7 +193,7 @@ public class CalculatorClient {
 					break;
 				case "÷":
 					try {
-						answer = model.getObj().divide(num2, num1); //call the divide(int, int) method in the server
+						answer = model.getObj().divide(num2, num1); //call the divide(double, double) method in the server
 						System.out.println("divided numbers = " + answer);
 
 
@@ -261,7 +261,10 @@ public class CalculatorClient {
 	    		}
 	    		
 	    		answer = evaluate(model.getPostfixExpression());
-	    		view.getTextField().setText(Integer.toString(answer));
+	    		if ((answer == Math.floor(answer)) && !Double.isInfinite(answer)) //if the answer is an integer, do not display the trailing .0 
+	    			view.getTextField().setText(Integer.toString((int)answer));
+	    		else 
+	    			view.getTextField().setText(Double.toString(answer));
 	    		view.getMessagesFromServer().setText(view.getMessagesFromServer().getText() + "\n" + "Message from server: " + answer);
 	    		model.setInfixExpression("");
 	    	}
@@ -290,13 +293,13 @@ public class CalculatorClient {
 
 	
 	/**
-	 * Return a boolean value based on whether the String passed as a parameter can be parsed as an integer or not
+	 * Return a boolean value based on whether the String passed as a parameter can be parsed as an double or not
 	 * @param String representation of a number
 	 * @return boolean value 
 	 */
 	public boolean isNumeric(String number) {
 		try {
-			Integer.parseInt(number);
+			Double.parseDouble(number);
 		}
 		catch(NumberFormatException es){
 			try {

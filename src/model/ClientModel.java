@@ -80,7 +80,6 @@ public class ClientModel {
 	 * Example: infix notation = 2*3   postfix notation of the same expression = 2 3 *
 	 */
 	public void infixToPostfix() {
-		boolean negValue = true;
 		postfixExpression = "";
 		Stack<Character> operators = new Stack<Character>(); //Stack to store operators
 		char current = ' ';
@@ -111,7 +110,6 @@ public class ClientModel {
 						while(!operators.isEmpty() &&  precedence(operators.peek()) >= precedence(current)) {
 							postfixExpression += operators.pop() + " "; //add the operator to the stack
 						}
-						negValue = true;
 						operators.push(current);
 					}
 					

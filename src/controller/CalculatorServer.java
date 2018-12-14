@@ -16,7 +16,7 @@ import view.ServerView;
  * This class is responsible for adding actionListeners to the ServerView.
  * 
  * Fields:
- * 	private int answer
+ * 	private double answer
  *  private ServerListener listener
  *  private static int portNumber
  *  private static final long serialVersionUID;
@@ -25,10 +25,10 @@ import view.ServerView;
  * Public Methods:
  * 	Constructor: public CalculatorServer()throws RemoteException
  *  public void calculatorConnected()
- *  public int add(int num1, int num2) throws RemoteException
- *  public int subtract(int num1, int num2) throws RemoteException
- *  public int multiply(int num1, int num2) throws RemoteException
- *  public int divide(int num1, int num2) throws RemoteException
+ *  public double add(double num1, double num2) throws RemoteException
+ *  public double subtract(double num1, double num2) throws RemoteException
+ *  public double multiply(double num1, double num2) throws RemoteException
+ *  public double divide(double num1, double num2) throws RemoteException
  *  public ServerListener getListener()
  *  public void setListener(ServerListener listener)
  *  
@@ -49,7 +49,7 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 	/**
 	 * Variable to hold the result of calculations returned from the add, subtract, multiply and divide methods
 	 */
-	private int answer;
+	private double answer;
 	
 	/**
 	 * A variable to reference an instance of the ServerListener class
@@ -115,13 +115,13 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 
 	/**
 	 * Override the add method from the Calculator interface.
-	 * Return the sum of two integers passed as parameters.
+	 * Return the sum of two doubles passed as parameters.
 	 * Display request from client in the ServerView
-	 * @return int result of the calculation
-	 * @param two integers to be used in the calculation
+	 * @return double result of the calculation
+	 * @param two doubles to be used in the calculation
 	 */
 	@Override
-	public int add(int num1, int num2) throws RemoteException {
+	public double add(double num1, double num2) throws RemoteException {
 		try{
 			view.addToDisplay("Addition request from client with IP address: " + getClientHost() + "\n" + num1 + " + " + num2);
 		}catch(Exception e){
@@ -135,13 +135,13 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 	
 	/**
 	 * Override the subtract method from the Calculator interface.
-	 * Return the difference of two integers passed as parameters.
+	 * Return the difference of two doubles passed as parameters.
 	 * Display request from client in the ServerView
-	 * @return int result of the calculation
-	 * @param two integers to be used in the calculation
+	 * @return double result of the calculation
+	 * @param two doubles to be used in the calculation
 	 */
 	@Override
-	public int subtract(int num1, int num2) throws RemoteException {
+	public double subtract(double num1, double num2) throws RemoteException {
 		try {
 			System.out.println("Subtraction request from client with IP address: " + getClientHost());
 			view.addToDisplay("Subtraction request from client with IP address: " + getClientHost() + "\n" + num1 + " - " + num2);
@@ -157,13 +157,13 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 	
 	/**
 	 * Override the multiply method from the Calculator interface.
-	 * Return the product of two integers passed as parameters.
+	 * Return the product of two doubles passed as parameters.
 	 * Display request from client in the ServerView
-	 * @return int result of the calculation
-	 * @param two integers to be used in the calculation
+	 * @return double result of the calculation
+	 * @param two doubles to be used in the calculation
 	 */
 	@Override
-	public int multiply(int num1, int num2) throws RemoteException {
+	public double multiply(double num1, double num2) throws RemoteException {
 		try {
 			System.out.println("Multiplication request from client with IP address: " + getClientHost());
 			view.addToDisplay("Multiplication request from client with IP address: " + getClientHost() + "\n" + num1 + " x " + num2);
@@ -180,13 +180,13 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 	
 	/**
 	 * Override the multiply method from the Calculator interface.
-	 * Return the result of two integers divided by each other passed as parameters.
+	 * Return the result of two doubles divided by each other passed as parameters.
 	 * Display request from client in the ServerView
-	 * @return int result of the calculation
-	 * @param two integers to be used in the calculation
+	 * @return double result of the calculation
+	 * @param two doubles to be used in the calculation
 	 */
 	@Override
-	public int divide(int num1, int num2) throws RemoteException {
+	public double divide(double num1, double num2) throws RemoteException {
 		try {
 			System.out.println("Division request from client with IP address: " + getClientHost());
 			view.addToDisplay("Division request from client with IP address: " + getClientHost() + "\n" + num1 + " ÷ " + num2);
