@@ -36,7 +36,7 @@ import view.CalculatorView;
  *
  * 
  * Private Class:  
- * 	Listener, This class is responsible to the action listeners associated with the componenets in the Calculator View
+ * 	Listener, This class is responsible to the action listeners associated with the components in the Calculator View
  * 
  * @author Emma Ni Bhriain
  * @version 1.0
@@ -167,7 +167,6 @@ public class CalculatorClient {
 				case "+":
 					try {
 						answer = model.getObj().add(num1, num2); //call the add(double, double) method in the server
-						System.out.println("Sum of numbers = " + answer);
 
 					} catch (RemoteException e1) {
 						view.displayError("Error evaluating sum in rmi");
@@ -176,7 +175,6 @@ public class CalculatorClient {
 				case "x":
 					try {
 						answer = model.getObj().multiply(num1, num2); //call the multiply(double, double) method in the server
-						System.out.println("product of numbers = " + answer);
 
 					} catch (RemoteException e1) {
 						view.displayError("Error evaluating multiplication in rmi");
@@ -185,7 +183,6 @@ public class CalculatorClient {
 				case "-":
 					try {
 						answer = model.getObj().subtract(num2, num1); //call the subtract(double, double) method in the server
-						System.out.println("Difference of numbers = " + answer);
 
 					} catch (RemoteException e1) {
 						view.displayError("Error evaluating subtraction in rmi");
@@ -194,8 +191,6 @@ public class CalculatorClient {
 				case "÷":
 					try {
 						answer = model.getObj().divide(num2, num1); //call the divide(double, double) method in the server
-						System.out.println("divided numbers = " + answer);
-
 
 					} catch (RemoteException e1) {
 						view.displayError("Error evaluating division in rmi");
@@ -250,11 +245,9 @@ public class CalculatorClient {
 	    	}
 	    	else {
 	    		model.setInfixExpression(view.getTextField().getText().trim());
-	    		System.out.println(model.getInfixExpression());
 	    		
 	    		try {
 	    			model.infixToPostfix();	    		
-		    		System.out.println(model.getPostfixExpression());
 	    		}
 	    		catch(Exception ex) {
 	    			view.displayError("Invalid expression");
