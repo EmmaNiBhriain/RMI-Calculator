@@ -90,8 +90,8 @@ public class ClientModel {
 
 			if(!isOperator(current)){ //if the current character is NOT an operator, add it to the postfix expression
 				postfixExpression += current;
-				if(i<infixExpression.length()-1 && isOperator(infixExpression.charAt(i+1))) //if the next character is an operator, add a space in the postfix expression
-					postfixExpression += " ";
+				//if(i<infixExpression.length()-1 && isOperator(infixExpression.charAt(i+1))) //if the next character is an operator, add a space in the postfix expression
+					//postfixExpression += " ";
 
 			}
 			else {
@@ -105,11 +105,16 @@ public class ClientModel {
 					operators.pop(); //remove the open bracket from the stack without adding it to the postfix expression
 				}
 				else {
-					while(!operators.isEmpty() &&  precedence(operators.peek()) >= precedence(current)) {
-						postfixExpression += operators.pop() + " "; //add the operator to the stack
+					if(current == '-' && infixExpression.charAt(i+1) != ' ')
+						postfixExpression += current;
+					else {
+						while(!operators.isEmpty() &&  precedence(operators.peek()) >= precedence(current)) {
+							postfixExpression += operators.pop() + " "; //add the operator to the stack
+						}
+						negValue = true;
+						operators.push(current);
 					}
-					negValue = true;
-					operators.push(current);
+					
 				}
 			}
 		}
@@ -150,6 +155,18 @@ public class ClientModel {
 		}
 	}
 
+	public boolean isNegative(String expression) {
+		if(expression.isEmpty())
+			return true;
+		else if(expression.length()>2) {
+			if(expression.charAt(expression.length()-1)==' ')
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+	}
 	
 	
 	/******************************************************

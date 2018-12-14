@@ -236,12 +236,23 @@ public class CalculatorClient {
 	    		view.getTextField().setText("");
 	    	}
 	    	else if(!e.getActionCommand().equals("Submit")) {
-	    		view.getTextField().setText(view.getTextField().getText() +  e.getActionCommand());
+	    		if(e.getActionCommand().equals("-") && model.isNegative(view.getTextField().getText())) {
+	    			view.getTextField().setText(view.getTextField().getText() +  e.getActionCommand());
+	    		}
+	    		else if(model.isOperator(e.getActionCommand().charAt(0))) {
+	    			view.getTextField().setText(view.getTextField().getText() + " " +   e.getActionCommand() + " ");
+	    		}
+	    		else {
+	    			view.getTextField().setText(view.getTextField().getText() +  e.getActionCommand());
+	    		}
+	    		
 	    	}
 	    	else {
-	    		model.setInfixExpression(view.getTextField().getText());
+	    		model.setInfixExpression(view.getTextField().getText().trim());
+	    		System.out.println(model.getInfixExpression());
 	    		
 	    		model.infixToPostfix();	    		
+	    		System.out.println(model.getPostfixExpression());
 	    		answer = evaluate(model.getPostfixExpression());
 	    		view.getTextField().setText(Integer.toString(answer));
 	    		view.getMessagesFromServer().setText(view.getMessagesFromServer().getText() + "\n" + "Message from server: " + answer);

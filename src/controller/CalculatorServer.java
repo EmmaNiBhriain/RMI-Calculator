@@ -268,15 +268,15 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 	public static void main(String args[]) {
 		try {
 
-			// Create an object of the HelloWorldServer class.
+			// Create an object of the CalculatorServer class.
 			CalculatorServer obj = new CalculatorServer();
-			// Bind this object instance to the name "HelloServer".
 			Registry registry = LocateRegistry.createRegistry( portNumber );
 			registry.rebind("Calculator", obj );
 		}
 		catch (Exception e) {
-			System.out.println("CalculatorServer error: " + e.getMessage());
-			e.printStackTrace();
+			ServerView view = new ServerView();
+			view.displayError("Cannot create new server registry. Port already in use");
+			view.dispose();
 		}
 	}
 
