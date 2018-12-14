@@ -1,17 +1,10 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.TextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -51,11 +44,13 @@ public class CalculatorView extends JFrame{
 	private JButton button_plus;
 	private JButton button_Submit;
 	private JButton button_clear;
-
+	private JButton button_closeBracket;
+	private JButton button_openBracket;
+	
 	private JPanel panel_2;
 	private JTextArea messagesFromServer;
-	private JScrollBar scrollBar;
 	private JScrollPane scrollPane;
+	
 	
 	/**
 	 * Create the frame.
@@ -180,6 +175,16 @@ public class CalculatorView extends JFrame{
 		button_clear.setPreferredSize(new Dimension(50, 50));
 		button_clear.setBounds(255, 133, 54, 49);
 		panel_1.add(button_clear);
+		
+		button_closeBracket = new JButton(")");
+		button_closeBracket.setPreferredSize(new Dimension(50, 50));
+		button_closeBracket.setBounds(255, 73, 54, 49);
+		panel_1.add(button_closeBracket);
+		
+		button_openBracket = new JButton("(");
+		button_openBracket.setPreferredSize(new Dimension(50, 50));
+		button_openBracket.setBounds(255, 13, 54, 49);
+		panel_1.add(button_openBracket);
 		textField.setBounds(12, 13, 285, 95);
 
 
@@ -223,7 +228,7 @@ public class CalculatorView extends JFrame{
 		
 		messagesFromServer = new JTextArea();
 		scrollPane.setViewportView(messagesFromServer);
-		//panel_2.setLayout(gl_panel_2);
+		panel_2.setLayout(gl_panel_2);
 
 
 		//panel_2.add(messagesFromServer);
@@ -250,6 +255,9 @@ public class CalculatorView extends JFrame{
 		button_plus.addActionListener(client.getListener());
 		button_Submit.addActionListener(client.getListener());
 		button_clear.addActionListener(client.getListener());
+		button_openBracket.addActionListener(client.getListener());
+		button_closeBracket.addActionListener(client.getListener());
+
 	}
 	
 	

@@ -16,7 +16,7 @@ import view.ServerView;
  * @version 1.0
  */
 public class CalculatorServer extends UnicastRemoteObject implements Calculator{
-	private ArrayList<CalculatorClient> clients = new ArrayList();
+	private ArrayList<CalculatorClient> clients = new ArrayList<CalculatorClient>();
 	private int answer;
 
 	/**
