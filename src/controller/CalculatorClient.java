@@ -109,7 +109,7 @@ public class CalculatorClient {
 		 * The connect() takes no parameters and returns nothing.
 		 * Connects to the remote object and stored the reference to the Calculator field in the ClientModel
 		 * This method called the remote method calculatorConnected that sends a message to the server to indicate that a client has been connected
-		 * In the event of an error when connecting, show a dialog box explianing the error and close the client view
+		 * In the event of an error when connecting, show a dialog box explaining the error and close the client view
 		 */
 		public void connect() {
 			try {
@@ -158,7 +158,8 @@ public class CalculatorClient {
 					num2 = operands.pop();
 				}
 				catch (EmptyStackException e){
-					view.displayError("Error retrieving operands from stack");
+					view.displayError("Invalid Expression");
+					break;
 				}
 				
 				
@@ -251,8 +252,14 @@ public class CalculatorClient {
 	    		model.setInfixExpression(view.getTextField().getText().trim());
 	    		System.out.println(model.getInfixExpression());
 	    		
-	    		model.infixToPostfix();	    		
-	    		System.out.println(model.getPostfixExpression());
+	    		try {
+	    			model.infixToPostfix();	    		
+		    		System.out.println(model.getPostfixExpression());
+	    		}
+	    		catch(Exception ex) {
+	    			view.displayError("Invalid expression");
+	    		}
+	    		
 	    		answer = evaluate(model.getPostfixExpression());
 	    		view.getTextField().setText(Integer.toString(answer));
 	    		view.getMessagesFromServer().setText(view.getMessagesFromServer().getText() + "\n" + "Message from server: " + answer);
