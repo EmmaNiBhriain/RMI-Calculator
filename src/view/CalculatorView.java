@@ -4,10 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -19,14 +18,69 @@ import controller.CalculatorClient;
 /*class CalculatorView*/
 /**
  * 
+ * This class builds the JFrame that is used for the User Interface for the client program.
+ * This class displays a calculator with a selection of buttons that the user can press.
+ * 
+ * Fields:
+ *  private static final long serialVersionUID;
+ * 	private JPanel contentPane;
+ *	private JPanel panel;
+ *	private JPanel panel_1;
+ *	private JTextField textField;
+ *	private JButton button_1;
+ *	private JButton button_2;
+ * 	private JButton button_6;
+ *	private JButton button_7;
+ *	private JButton button_4;
+ *	private JButton button_8;
+ *	private JButton button_9;
+ *	private JButton btnX;
+ *	private JButton button_5;
+ *	private JButton button_decimal;
+ *	private JButton button_3;
+ *	private JButton button_0;
+ *	private JButton button_divide;
+ *	private JButton button_subtract;
+ *	private JButton button_plus;
+ * 	private JButton button_Submit;
+ *	private JButton button_clear;
+ *	private JButton button_closeBracket;
+ *	private JButton button_openBracket;
+ *	private JPanel panel_2;
+ *	private JTextArea messagesFromServer;
+ *	private JScrollPane scrollPane;
+ *
+ *
+ *
+ * Methods:
+ *  private void initComponents()
+ *  public void addListeners(CalculatorClient client)
+ *  public JTextArea getMessagesFromServer()
+ *  public JTextField getTextField()
+ *  public void displayError(String message)
+ * 
  * @author Emma Ni Bhriain
  * @version 1.0
  */
 public class CalculatorView extends JFrame{
+	/**
+	 * UID necessary because the superclass JFrame is serializable
+	 */
+	private static final long serialVersionUID = 3L;
+	
+	/**
+	 * JPanels for the UI
+	 */
 	private JPanel contentPane;
 	private JPanel panel;
 	private JPanel panel_1;
+	private JPanel panel_2;
+	
+	/**
+	 * Components including JButtons, JTextArea and JTextField
+	 */
 	private JTextField textField;
+	private JTextArea messagesFromServer;
 	private JButton button_1;
 	private JButton button_2;
 	private JButton button_6;
@@ -47,21 +101,25 @@ public class CalculatorView extends JFrame{
 	private JButton button_closeBracket;
 	private JButton button_openBracket;
 	
-	private JPanel panel_2;
-	private JTextArea messagesFromServer;
+	
+	
+	/**
+	 * ScrollPane that will surround a JTextArea
+	 */
 	private JScrollPane scrollPane;
 	
 	
 	/**
-	 * Create the frame.
+	 * Call the method to create the frame.
 	 */
 	public CalculatorView() {
 		initComponents();
 	}
 	
-	
+	/**
+	 * Initialise components and add them to the JFrame
+	 */
 	private void initComponents() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 327, 578);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -86,9 +144,9 @@ public class CalculatorView extends JFrame{
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
+		//create JButtons and add to panel_1
 		button_2 = new JButton("2");
 		button_2.setPreferredSize(new Dimension(50, 50));
-
 		button_2.setBounds(74, 13, 54, 49);
 		panel_1.add(button_2);
 
@@ -187,27 +245,14 @@ public class CalculatorView extends JFrame{
 		panel_1.add(button_openBracket);
 		textField.setBounds(12, 13, 285, 95);
 
-
-//		panel_2 = new JPanel();
-////		panel_2.setLayout(null);
-//		panel_2.setBackground(new Color(230, 230, 250));
-//		panel_2.setBounds(0, 392, 309, 139);
-//		contentPane.add(panel_2);
-//
-//		messagesFromServer = new JTextArea();
-//		//messagesFromServer.setBounds(12, 13, 262, 113);
-//		
-//		scrollPane = new JScrollPane(messagesFromServer);
-//		scrollPane.setBounds(12, 13, 262, 113);
-//		panel_2.add(scrollPane);
-
+		
+		//Create another panel to hold the textarea that displays messages from the server
 		panel_2 = new JPanel();
-//		panel_2.setLayout(null);
 		panel_2.setBackground(new Color(230, 230, 250));
 		panel_2.setBounds(0, 392, 309, 139);
 		contentPane.add(panel_2);
-		//messagesFromServer.setBounds(12, 13, 262, 113);
 		
+		//Create a scrollpane to allow scrolling through textarea
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 13, 262, 113);
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -226,18 +271,21 @@ public class CalculatorView extends JFrame{
 					.addContainerGap())
 		);
 		
+		//Add a new textarea to the scrollpane
 		messagesFromServer = new JTextArea();
 		scrollPane.setViewportView(messagesFromServer);
 		panel_2.setLayout(gl_panel_2);
 
-
-		//panel_2.add(messagesFromServer);
+		setVisible(true);
 		
 	}
 	
+	/**
+	 * Add listeners to the buttons using an instance of the Listener class stored in the CalculatorClient in the controller package
+	 * @param client that has a reference to an instance of the Listener class
+	 */
 	public void addListeners(CalculatorClient client) {
 		//Add action listeners
-		//Listener actionListener = client.getListener();
 		button_1.addActionListener(client.getListener());
 		button_2.addActionListener(client.getListener());
 		button_6.addActionListener(client.getListener());
@@ -257,28 +305,40 @@ public class CalculatorView extends JFrame{
 		button_clear.addActionListener(client.getListener());
 		button_openBracket.addActionListener(client.getListener());
 		button_closeBracket.addActionListener(client.getListener());
-
+	}
+	
+	/**
+	 * Display a dialog box in the event of an exception being thrown and display error message.
+	 * @param message to be displayed in the dialog box
+	 */
+	public void displayError(String message) {
+		JOptionPane.showMessageDialog(this,message,"error", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	
+	
+	/******************************************************
+	 * 
+	 * 				  Getters
+	 * 
+	 ******************************************************/
+	
+	/**
+	 * Return the JTextArea that displays the messages of the server
+	 * @return JTextArea 
+	 */
 	public JTextArea getMessagesFromServer() {
 		return messagesFromServer;
 	}
 
-
-	public void setMessagesFromServer(JTextArea messagesFromServer) {
-		this.messagesFromServer = messagesFromServer;
-	}
-
-
+	/**
+	 * Return the JTextField that displays the values of the buttons as they are pressed
+	 * @return JTextField
+	 */
 	public JTextField getTextField() {
 		return textField;
 	}
 
-
-	public void setTextField(JTextField textField) {
-		this.textField = textField;
-	}
 }
 
 

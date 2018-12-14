@@ -1,86 +1,152 @@
 package controller;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-
 import model.Calculator;
 import view.ServerView;
 
 /*class CalculatorServer*/
 /**
+ * This class is the controller that communicates with the ServerView class.
+ * The server also has methods that are called remotely from the Calculator client controller.
+ * This class is responsible for adding actionListeners to the ServerView.
+ * 
+ * Fields:
+ * 	private int answer
+ *  private ServerListener listener
+ *  private static int portNumber
+ *  private static final long serialVersionUID;
+	private ServerView view;
+ *  
+ * Public Methods:
+ * 	Constructor: public CalculatorServer()throws RemoteException
+ *  public void calculatorConnected()
+ *  public int add(int num1, int num2) throws RemoteException
+ *  public int subtract(int num1, int num2) throws RemoteException
+ *  public int multiply(int num1, int num2) throws RemoteException
+ *  public int divide(int num1, int num2) throws RemoteException
+ *  public ServerListener getListener()
+ *  public void setListener(ServerListener listener)
+ *  
+ * Private Class:  
+ * 	ServerListener, This class is responsible to the action listeners associated with the components in the ServerView
  * 
  * @author Emma Ni Bhriain
  * @version 1.0
  */
-public class CalculatorServer extends UnicastRemoteObject implements Calculator{
-	private ArrayList<CalculatorClient> clients = new ArrayList<CalculatorClient>();
+public class CalculatorServer extends UnicastRemoteObject implements Calculator{	
+
+	/******************************************************
+	 * 
+	 * 						Fields
+	 * 
+	 ******************************************************/
+	
+	/**
+	 * Variable to hold the result of calculations returned from the add, subtract, multiply and divide methods
+	 */
 	private int answer;
+	
+	/**
+	 * A variable to reference an instance of the ServerListener class
+	 */
+	private ServerListener listener;
+	
+	/**
+	 * Port number used to create a registry
+	 */
+	private static int portNumber = 1099;
 
 	/**
-	 * 
+	 * serialVersionUID required as the class extends the UnicastRemoteObject class which is serializable
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	
+	/**
+	 * Reference to an instance of the ServerView class.
+	 */
 	private ServerView view;
 
+	
+	/******************************************************
+	 * 
+	 * 						Constructor
+	 * 
+	 ******************************************************/
+	
+	/**
+	 * Create a new instance of the ServerView and ServerListener classes.
+	 * Add the ServerListener to the button component in the ServerView.
+	 * @throws RemoteException
+	 */
 	public CalculatorServer() throws RemoteException {
 		super();
 		this.view = new ServerView();
 		view.setVisible(true);
+		this.listener = new ServerListener();
+		view.addListener(this);
 	}
 
-	public static void main(String args[]) {
-		try {
+	
+	
+	/******************************************************
+	 * 
+	 * 						Methods
+	 * 
+	 ******************************************************/
+	
 
-			// Create an object of the HelloWorldServer class.
-
-			CalculatorServer obj = new CalculatorServer();
-
-			// Bind this object instance to the name "HelloServer".
-			Registry registry = LocateRegistry.createRegistry( 1099 );
-
-			// and replace the Naming.rebind() with the next line
-			registry.rebind("Calculator", obj );
-
-			System.out.println("Calculator bound in registry");
-		}
-		catch (Exception e) {
-			System.out.println("CalculatorServer error: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
+	/**
+	 * This method displays the IP address of the connected client to the ServerView
+	 */
 	@Override
 	public void calculatorConnected() {
 		try {
-			System.out.println("Client connected at IP address: " + getClientHost());
 			view.addToDisplay("Client connected at IP address: " + getClientHost());
 		} catch (ServerNotActiveException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Override the add method from the Calculator interface.
+	 * Return the sum of two integers passed as parameters.
+	 * Display request from client in the ServerView
+	 * @return int result of the calculation
+	 * @param two integers to be used in the calculation
+	 */
 	@Override
 	public int add(int num1, int num2) throws RemoteException {
 		try{
-			System.out.println("Addition request from client with IP address: " + getClientHost()); // display message
 			view.addToDisplay("Addition request from client with IP address: " + getClientHost() + "\n" + num1 + " + " + num2);
-		}catch(Exception e){}
+		}catch(Exception e){
+			view.displayError("Could not get client ip address");
+		}
 		answer = num1+num2;
 		view.addToDisplay("Answer returned to client: " + answer);
-
 		return answer;
 	}
 
+	
+	/**
+	 * Override the subtract method from the Calculator interface.
+	 * Return the difference of two integers passed as parameters.
+	 * Display request from client in the ServerView
+	 * @return int result of the calculation
+	 * @param two integers to be used in the calculation
+	 */
 	@Override
-	public int subract(int num1, int num2) throws RemoteException {
+	public int subtract(int num1, int num2) throws RemoteException {
 		try {
 			System.out.println("Subtraction request from client with IP address: " + getClientHost());
 			view.addToDisplay("Subtraction request from client with IP address: " + getClientHost() + "\n" + num1 + " - " + num2);
 		} catch (ServerNotActiveException e) {
-
+			view.displayError("Could not get client ip address");
 		} // display message
 		answer = num1-num2;
 		view.addToDisplay("Answer returned to client: " + answer);
@@ -88,6 +154,14 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 		return answer;
 	}
 
+	
+	/**
+	 * Override the multiply method from the Calculator interface.
+	 * Return the product of two integers passed as parameters.
+	 * Display request from client in the ServerView
+	 * @return int result of the calculation
+	 * @param two integers to be used in the calculation
+	 */
 	@Override
 	public int multiply(int num1, int num2) throws RemoteException {
 		try {
@@ -95,8 +169,7 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 			view.addToDisplay("Multiplication request from client with IP address: " + getClientHost() + "\n" + num1 + " x " + num2);
 
 		} catch (ServerNotActiveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			view.displayError("Could not get client ip address");
 		} // display message
 		answer =  num1*num2;
 		view.addToDisplay("Answer returned to client: " + answer);
@@ -104,6 +177,14 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 		return answer;
 	}
 
+	
+	/**
+	 * Override the multiply method from the Calculator interface.
+	 * Return the result of two integers divided by each other passed as parameters.
+	 * Display request from client in the ServerView
+	 * @return int result of the calculation
+	 * @param two integers to be used in the calculation
+	 */
 	@Override
 	public int divide(int num1, int num2) throws RemoteException {
 		try {
@@ -111,12 +192,92 @@ public class CalculatorServer extends UnicastRemoteObject implements Calculator{
 			view.addToDisplay("Division request from client with IP address: " + getClientHost() + "\n" + num1 + " ÷ " + num2);
 
 		} catch (ServerNotActiveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			view.displayError("Could not get client ip address");
 		} // display message
 		answer = num1/num2;
 		view.addToDisplay("Answer returned to client: " + answer);
 		return answer;
+	}
+	
+	
+	/******************************************************
+	 * 
+	 * 				    Private Class
+	 * 
+	 ******************************************************/
+	
+	/*private class ServerListener implements ActionListener*/
+	/**
+	 * This class is responsible for handling events in the server GUI based on user input
+	 * @author Emma
+	 * @version 1.0
+	 */
+	private class ServerListener implements ActionListener {
+		
+		/**
+		 * Override the actionPerformed method from the ActionListener interface.
+		 * If the "Create Client" button is pressed, run the Calculator Client program. 
+		 */
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+	    	if(e.getActionCommand().equals("Create Client")) {
+	    		CalculatorClient.main(null);
+	    		
+	    	}
+	      
+	    }
+	}
+	
+	
+	
+	/******************************************************
+	 * 
+	 * 				   Getters and Setters
+	 * 
+	 ******************************************************/
+
+	/**
+	 * Return the instance of the ServerListener class stored in the listener variable.
+	 * @return ServerListener
+	 */
+	public ServerListener getListener() {
+		return listener;
+	}
+
+	/**
+	 * Set the value of the listener variable
+	 * @param listener, instance of the ServerListener class 
+	 */
+	public void setListener(ServerListener listener) {
+		this.listener = listener;
+	}
+	
+	
+	
+	/******************************************************
+	 * 
+	 * 						Main Method
+	 * 
+	 ******************************************************/
+	/**
+	 * This method is used to start the program.
+	 * It creates a new CalculatorServer object and binds the object to the registry created at the specified port number
+	 *
+	 * @param args
+	 */
+	public static void main(String args[]) {
+		try {
+
+			// Create an object of the HelloWorldServer class.
+			CalculatorServer obj = new CalculatorServer();
+			// Bind this object instance to the name "HelloServer".
+			Registry registry = LocateRegistry.createRegistry( portNumber );
+			registry.rebind("Calculator", obj );
+		}
+		catch (Exception e) {
+			System.out.println("CalculatorServer error: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 }
